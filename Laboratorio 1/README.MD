@@ -7,3 +7,4 @@
 6. Realice el ejercicio 4 con cursor (es) en la tercera forma de sintaxis.
 7. Un bloque PL/SQL con cursores anidados que imprima en pantalla para cada productor: Su nombre, el número de productos que ofrece y el nombre y precio de cada uno de ellos.
 8. Un bloque PL/SQL para cumplir la siguiente restricción del sistema: “Cuando un producto tiene una cantidad inferior a 10 unidades, su precio se incrementa en un 5%” (Use la cláusula CURRENT OF dentro del cursor con el cual recorrerá la tabla de productos).
+9. Agregar las excepciones necesarias a los bloques PL/SQL realizados en los ejercicios 5-8. 
