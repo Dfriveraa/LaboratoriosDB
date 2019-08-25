@@ -59,7 +59,7 @@ EXCEPTION
 END;
 /
 --Ejercicio
-create or replace procedure ejercicioUno(nombre IN CLIENTE.NOM%TYPE,cedula IN CLIENTE.CED%TYPE, nit In EMPLEO.NIT_EMPRESA%TYPE, valor IN EMPLEO.VALOR_MENSUAL%TYPE)
+create or replace procedure ejercicioUno(cedula IN CLIENTE.CED%TYPE,nit In EMPLEO.NIT_EMPRESA%TYPE,nombre IN CLIENTE.NOM%TYPE,valor IN EMPLEO.VALOR_MENSUAL%TYPE)
 IS
 checkCliente BOOLEAN;
 checkEmpleo BOOLEAN;
@@ -75,4 +75,7 @@ EXCEPTION
 END;
 /
 
-
+--Ejecución
+BEGIN
+    ejercicioUno(115,456,'Daniel', 200);
+END;

@@ -5,3 +5,5 @@
 - Si el empleo ya existe, se debe modificar el valor mensual que gana. 
 - Se debe mostrar un mensaje al usuario para que sepa cuál de las operaciones fue la que se realizó.
 - Tenga en cuenta las posibles excepciones!!!
+
+2.	Realice un procedimiento que retorne (parámetro de salida) la cédula del cliente que más gana. Tenga en cuenta las posibles excepciones.
