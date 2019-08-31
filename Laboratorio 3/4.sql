@@ -1,6 +1,6 @@
 CREATE OR REPLACE PACKAGE laboratorio IS
-    FUNCTION masGaston RETURN NUMBER;
-    FUNCTION mejorPagado RETURN NUMBER;
+    FUNCTION masGaston RETURN gasto.ced%Type;
+    FUNCTION mejorPagado RETURN empleo.ced%Type;
 END;
 /
 CREATE OR REPLACE PACKAGE BODY laboratorio IS
@@ -35,4 +35,5 @@ CREATE OR REPLACE PACKAGE BODY laboratorio IS
                 DBMS_OUTPUT.PUT_LINE('Error ' || SQLERRM);
      END;
 END;
+
 
