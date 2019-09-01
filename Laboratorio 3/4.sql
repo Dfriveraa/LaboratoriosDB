@@ -9,7 +9,7 @@ CREATE OR REPLACE PACKAGE BODY laboratorio IS
         IS 
         masGaston gasto.ced%Type; 
         BEGIN  
-            SELECT ced into masGaston FROM gasto where valor_mensual=(SELECT max(valor_mensual) FROM gasto); 
+            SELECT ced  into masGaston FROM gasto group by ced having Sum(valor_mensual)= (select max(x.sum) from (SELECT sum(valor_mensual) as sum FROM gasto group by ced)x);
             return masGaston; 
         EXCEPTION 
             WHEN NO_DATA_FOUND THEN  
@@ -24,7 +24,7 @@ CREATE OR REPLACE PACKAGE BODY laboratorio IS
         IS
         mejorPago empleo.ced%Type;
         BEGIN 
-            SELECT ced into mejorPago FROM empleo where valor_mensual=(SELECT max(valor_mensual) FROM empleo);
+            SELECT ced into mejorPago FROM empleo group by ced having Sum(valor_mensual)=(SELECT max(x.sum) FROM (SELECT sum(valor_mensual) as sum FROM empleo  group by ced)x);
             return mejorPago;
         EXCEPTION
             WHEN NO_DATA_FOUND THEN 
@@ -36,4 +36,17 @@ CREATE OR REPLACE PACKAGE BODY laboratorio IS
      END;
 END;
 
+--Ejecución
+Declare
+    a gasto.ced%Type;
+begin
+    a:=laboratorio.masGaston;
+    DBMS_OUTPUT.PUT_LINE('El mas gaston es el cliente con cédula ' || a);
+end;
 
+Declare
+    a empleo.ced%Type;
+begin
+    a:=laboratorio.mejorPagado;
+    DBMS_OUTPUT.PUT_LINE('El mejor pagado es el ' || a);
+end;

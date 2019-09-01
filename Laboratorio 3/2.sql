@@ -3,7 +3,7 @@ CREATE OR REPLACE function mejorPagado
     IS
     mejorPago empleo.ced%Type;
     BEGIN 
-        SELECT ced into mejorPago FROM empleo where valor_mensual=(SELECT max(valor_mensual) FROM empleo);
+        SELECT ced into mejorPago FROM empleo group by ced having Sum(valor_mensual)=(SELECT max(x.sum) FROM (SELECT sum(valor_mensual) as sum FROM empleo  group by ced)x);
         return mejorPago;
     EXCEPTION
         WHEN NO_DATA_FOUND THEN 

@@ -4,7 +4,7 @@ CREATE OR REPLACE function masGaston
     IS 
     masGaston gasto.ced%Type; 
     BEGIN  
-        SELECT ced into masGaston FROM gasto where valor_mensual=(SELECT max(valor_mensual) FROM gasto); 
+        SELECT ced  into masGaston FROM gasto group by ced having Sum(valor_mensual)= (select max(x.sum) from (SELECT sum(valor_mensual) as sum FROM gasto group by ced)x);
         return masGaston; 
     EXCEPTION 
         WHEN NO_DATA_FOUND THEN  

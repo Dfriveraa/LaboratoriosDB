@@ -21,7 +21,13 @@ INSERT INTO cliente (ced, nom) values (4, 'Carlos');
 INSERT INTO empleo (ced, nit_empresa, valor_mensual) values (1, 1, 1500);
 INSERT INTO empleo (ced, nit_empresa, valor_mensual) values (2, 2, 800);
 INSERT INTO empleo (ced, nit_empresa, valor_mensual) values (3, 3, 456);
+INSERT INTO empleo (ced, nit_empresa, valor_mensual) values (2, 4, 1000);
 
 INSERT INTO GASTO  values (1, 1, 900,'cion');
 INSERT INTO GASTO  values (2, 2, 5000,'crip');
 INSERT INTO GASTO  values (3, 3, 800,'des');
+INSERT INTO GASTO  values (4, 2, 4500,'crip');
+INSERT INTO GASTO  values (5, 1, 9000,'cion');
+
+
+
