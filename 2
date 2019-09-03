@@ -1,0 +1,8 @@
+CREATE OR REPLACE TRIGGER control_inserción BEFORE INSERT ON producto
+BEGIN
+IF (TO_CHAR(SYSDATE,'DY') IN ('SÁB','DOMINGO'))	
+OR (TO_NUMBER(TO_CHAR(SYSDATE,'HH24')) NOT BETWEEN 8 AND 17) THEN
+RAISE_APPLICATION_ERROR(-20506,'Sólo se pueden ingresar productos en horario de oficina' || DIA);
+END IF;
+END;
+/
