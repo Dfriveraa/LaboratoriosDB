@@ -1,8 +1,11 @@
-CREATE OR REPLACE TRIGGER control_inserción BEFORE INSERT ON producto
+create or replace TRIGGER control_cliente BEFORE INSERT or Update or delete ON cliente
 BEGIN
-IF (TO_CHAR(SYSDATE,'DY') IN ('SÁB','DOMINGO'))	
-OR (TO_NUMBER(TO_CHAR(SYSDATE,'HH24')) NOT BETWEEN 8 AND 17) THEN
-RAISE_APPLICATION_ERROR(-20506,'Sólo se pueden ingresar productos en horario de oficina' || DIA);
-END IF;
+    case
+        when inserting then
+            insert into auditoria values(SYSDATE,'cliente','insert');
+        when updating then
+            insert into auditoria values(SYSDATE,'cliente','update');
+        when deleting then
+            insert into auditoria values(SYSDATE,'cliente','delete');
+    end case;
 END;
-/
