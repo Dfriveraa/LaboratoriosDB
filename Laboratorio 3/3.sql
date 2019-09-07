@@ -14,7 +14,6 @@ CREATE OR REPLACE function masGaston
         WHEN OTHERS THEN 
             DBMS_OUTPUT.PUT_LINE('Error ' || SQLERRM); 
 END; 
-/
 
 --Ejecución
 Declare

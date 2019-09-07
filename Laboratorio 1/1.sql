@@ -1,14 +1,4 @@
-BEGIN 
-    EXECUTE IMMEDIATE 
-    'CREATE TABLE producto(id NUMBER(8)
-    ,nombre VARCHAR(20)
-    ,descripcion VARCHAR(20)
-    ,productor_id NUMBER(8)
-    ,cantidad NUMBER(4)
-    ,precio NUMBER(8)
-    ,PRIMARY KEY(id)
-    ,FOREIGN KEY(productor_id) REFERENCES PRODUCTOR)'; 
-END;
+
 
 BEGIN 
     EXECUTE IMMEDIATE 
@@ -17,7 +7,17 @@ BEGIN
     ,direccion VARCHAR(20)
     ,PRIMARY KEY(id))'; 
 END;
-
+BEGIN
+    EXECUTE IMMEDIATE
+    'CREATE TABLE producto(id NUMBER(8)
+    ,nombre VARCHAR(20)
+    ,descripcion VARCHAR(20)
+    ,productor_id NUMBER(8)
+    ,cantidad NUMBER(4)
+    ,precio NUMBER(8)
+    ,PRIMARY KEY(id)
+    ,FOREIGN KEY(productor_id) REFERENCES PRODUCTOR)';
+END;
 BEGIN 
     EXECUTE IMMEDIATE 
     'CREATE TABLE venta(id NUMBER(8)
