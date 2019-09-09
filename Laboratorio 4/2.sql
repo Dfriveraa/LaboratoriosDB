@@ -50,4 +50,21 @@ create or replace TRIGGER REGLAGASTO_insert  BEFORE INSERT ON gasto
         end if;
 
 END;
+create or replace TRIGGER REGLAGASTO_update  before update ON gasto
+    for each row
+    declare
+        ganancias empleo.valor_mensual%type;
+        gastos gasto.valor_mensual%type;
+        
+    BEGIN
 
+        gastos:=gastos_mensuales(:NEW.CED);
+        ganancias:=ganancias_mensuales(:NEW.CED);
+        gastos:=gastos-:old.valor_mensual;
+        gastos:=gastos+:NEW.valor_mensual;
+        
+        IF gastos>ganancias THEN
+            RAISE_APPLICATION_ERROR(-20505,'El valor de gastos mensual supera al de ganancias');
+        end if;
+
+END;
