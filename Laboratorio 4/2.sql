@@ -35,7 +35,7 @@ create or  replace function ganancias_mensuales(cedula empleo.ced%type)
         return ganancias;
     END;
 --Regla de gastos para cuando se inserta o modifica un gasto
-create or replace TRIGGER REGLAGASTO  BEFORE INSERT or Update  ON gasto
+create or replace TRIGGER REGLAGASTO_insert  BEFORE INSERT ON gasto
     for each row
     declare
         ganancias empleo.valor_mensual%type;
@@ -48,6 +48,6 @@ create or replace TRIGGER REGLAGASTO  BEFORE INSERT or Update  ON gasto
         IF gastos>ganancias THEN
             RAISE_APPLICATION_ERROR(-20505,'El valor de gastos mensual supera al de ganancias');
         end if;
+
 END;
---Regla de gastos para cuando se inserta o modifica un empleo
 
