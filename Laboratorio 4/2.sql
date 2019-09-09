@@ -2,26 +2,32 @@
 CREATE OR REPLACE function gastos_mensuales(cedula empleo.ced%type)
     return empleo.VALOR_MENSUAL%Type
     IS
-    client cliente.CED%TYPE;
     gastos empleo.VALOR_MENSUAL%Type;
     BEGIN
-        SELECT CED INTO client FROM GASTO WHERE CED=cedula group by CED;
+        
         SELECT sum(VALOR_MENSUAL) into gastos from GASTO where CED = cedula;
+        if gastos is null then
+            gastos:=0;
+            return gastos;
+        end if;
         return gastos;
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
         gastos:=0;
         return gastos;
     END;
+    
 --Función para calcular las ganancias mensuales
 create or  replace function ganancias_mensuales(cedula empleo.ced%type)
     return empleo.VALOR_MENSUAL%Type
     IS
-    client cliente.CED%TYPE;
     ganancias empleo.VALOR_MENSUAL%Type;
     BEGIN
-        SELECT CED INTO client FROM EMPLEO WHERE CED=cedula group by CED;
         SELECT sum(VALOR_MENSUAL) into ganancias from EMPLEO where CED = cedula;
+        if ganancias is null then
+            ganancias:=0;
+            return ganancias;
+        end if;
         return ganancias;
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
