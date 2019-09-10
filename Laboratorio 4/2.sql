@@ -34,7 +34,7 @@ create or  replace function ganancias_mensuales(cedula empleo.ced%type)
         ganancias:=0;
         return ganancias;
     END;
---Regla de gastos para cuando se inserta o modifica un gasto
+--Reglas de gastos para cuando se inserta o modifica un gasto
 create or replace TRIGGER REGLAGASTO_insert  BEFORE INSERT ON gasto
     for each row
     declare
@@ -44,7 +44,6 @@ create or replace TRIGGER REGLAGASTO_insert  BEFORE INSERT ON gasto
         ganancias:=ganancias_mensuales(:NEW.CED);
         gastos:=gastos_mensuales(:NEW.CED);
         gastos:=gastos+:NEW.valor_mensual;
-        DBMS_OUTPUT.PUT_LINE('gastos =' || gastos ||' ganancias =' || ganancias);
         IF gastos>ganancias THEN
             RAISE_APPLICATION_ERROR(-20505,'El valor de gastos mensual supera al de ganancias');
         end if;
@@ -57,7 +56,6 @@ create or replace TRIGGER REGLAGASTO_update  before update ON gasto
         gastos gasto.valor_mensual%type;
         
     BEGIN
-
         gastos:=gastos_mensuales(:NEW.CED);
         ganancias:=ganancias_mensuales(:NEW.CED);
         gastos:=gastos-:old.valor_mensual;
@@ -68,3 +66,33 @@ create or replace TRIGGER REGLAGASTO_update  before update ON gasto
         end if;
 
 END;
+--Reglas en empleo para cuando se elimina o modifica un dato
+create or replace TRIGGER REGLAEMPLEO_delete before delete on EMPLEO
+    for each row
+    declare
+        ganancias empleo.valor_mensual%type;
+        gastos gasto.valor_mensual%type;
+    begin
+        gastos:=gastos_mensuales(:NEW.CED);
+        ganancias:=ganancias_mensuales(:NEW.CED);
+        ganancias:=ganancias-:OLD.valor_mensual;
+        IF gastos>ganancias THEN
+            RAISE_APPLICATION_ERROR(-20505,'El valor de gastos mensual supera al de ganancias');
+        end if;
+    end;
+
+create or replace TRIGGER REGLAEMPLEO_update before delete on EMPLEO
+    for each row
+    declare
+        ganancias empleo.valor_mensual%type;
+        gastos gasto.valor_mensual%type;
+    begin
+        gastos:=gastos_mensuales(:NEW.CED);
+        ganancias:=ganancias_mensuales(:NEW.CED);
+        ganancias:=ganancias-:OLD.valor_mensual;
+        ganancias:=ganancias+:NEW.valor_mensual;
+        IF gastos>ganancias THEN
+            RAISE_APPLICATION_ERROR(-20505,'El valor de gastos mensual supera al de ganancias');
+        end if;
+    end;
+
