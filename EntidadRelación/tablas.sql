@@ -21,7 +21,7 @@ CREATE TABLE asiento_función (
     f_pf_formato_cod      VARCHAR2(3) NOT NULL,
     asiento_num           NUMBER(2) NOT NULL,
     asiento_letra         CHAR(1) NOT NULL,
-    estado                VARCHAR2(12) NOT NULL check(estado in('Reservado','Vendido','Inactivo')),
+    estado                VARCHAR2(12) NOT NULL check(estado in('Reservado','Vendido','Inactivo','Disponible')),
     r_cliente_doc         VARCHAR2(10),
     r_cliente_td          VARCHAR2(4),
     reserva_hora          TIMESTAMP,
@@ -59,7 +59,7 @@ CREATE UNIQUE INDEX boleta__idx ON
     boleta (
         af_función_hora_inicio
     ASC,
-        af_función_fechataquilla
+        af_función_fecha
     ASC,
         af_f_sala_número
     ASC,
@@ -134,7 +134,7 @@ CREATE TABLE empleado_sala (
     sala_sucursal_código   VARCHAR2(5) NOT NULL,
     empleado_código        VARCHAR2(5) NOT NULL,
     hora_inicio            TIMESTAMP NOT NULL,
-    hora_fin               TIMESTAMP NOT NULL check(hora_fin>hora_inicio)
+    hora_fin               TIMESTAMP NOT NULL, check(hora_fin>hora_inicio)
 );
 
 ALTER TABLE empleado_sala
@@ -150,11 +150,11 @@ CREATE TABLE empleado_taquilla (
     t_sucursal_cod   VARCHAR2(5) NOT NULL,
     empleado_cod     VARCHAR2(5) NOT NULL,
     hora_inicio      TIMESTAMP NOT NULL,
-    hora_fin         TIMESTAMP NOT NULL check(hora_fin>hora_inicio)
+    hora_fin         TIMESTAMP NOT NULL, check(hora_fin>hora_inicio)
 );
 
-ALTER TABLE empleados_taquilla
-    ADD CONSTRAINT empleados_taquilla_pk PRIMARY KEY ( fecha,
+ALTER TABLE empleado_taquilla
+    ADD CONSTRAINT empleado_taquilla_pk PRIMARY KEY ( fecha,
                                                        taquilla_num,
                                                        t_sucursal_cod,
                                                        empleado_cod );
@@ -162,7 +162,7 @@ ALTER TABLE empleados_taquilla
 CREATE TABLE evento (
     código            VARCHAR2(4) NOT NULL,
     fecha             DATE NOT NULL,
-    valor             NUMBER NOT NULL check(duración>=0),
+    valor             NUMBER NOT NULL check(valor>=0),
     duración          NUMBER(2) NOT NULL check(duración>0),
     cliente_doc       VARCHAR2(10) NOT NULL,
     sala_num          NUMBER(2) NOT NULL,
@@ -187,8 +187,7 @@ ALTER TABLE formato ADD CONSTRAINT formato_pk PRIMARY KEY ( código );
 CREATE TABLE función (
     fecha             DATE NOT NULL,
     hora_inicio       TIMESTAMP NOT NULL,
-    hora_fin          TIMESTAMP NOT NULL check(hora_fin>hora_inicio),
-    precio_regular    NUMBER(6, 3) NOT NULL check(precio_regular>0),
+    hora_fin          TIMESTAMP NOT NULL, check(hora_fin>hora_inicio),
     sala_num          NUMBER(2) NOT NULL,
     s_sucursal_cod    VARCHAR2(5) NOT NULL,
     pf_pelicula_cod   VARCHAR2(10) NOT NULL,
@@ -227,7 +226,7 @@ CREATE TABLE pelicula (
     sinopsis        VARCHAR2(100),
     productor_cod   VARCHAR2(5) NOT NULL,
     duración        NUMBER(3) NOT NULL
-        check(duración>0+)
+        check(duración>0)
 );
 
 ALTER TABLE pelicula ADD CONSTRAINT pelicula_pk PRIMARY KEY ( código );
@@ -272,7 +271,7 @@ CREATE TABLE reserva (
     fecha               DATE NOT NULL,
     estado              VARCHAR2(12) NOT NULL check( estado in ('Pago','Cancel','Activa')),
     cliente_doc         VARCHAR2(10) NOT NULL,
-    plazo_cancelación   TIMESTAMP NOT NULL check(plazo_cancelación>hora),
+    plazo_cancelación   TIMESTAMP NOT NULL,
     cliente_td          VARCHAR2(4) NOT NULL
 );
 
@@ -283,7 +282,7 @@ ALTER TABLE reserva
 
 CREATE TABLE sala (
     número              NUMBER(2) NOT NULL check(número>0),
-    cantidad_asientos   NUMBER(3) NOT NULL check (cantidad_asientos)),
+    cantidad_asientos   NUMBER(3) NOT NULL check (cantidad_asientos>0),
     tipo                VARCHAR2(8) NOT NULL,
     sucursal_cod        VARCHAR2(5) NOT NULL
 );
@@ -301,7 +300,7 @@ ALTER TABLE sucursal ADD CONSTRAINT sucursal_pk PRIMARY KEY ( código );
 
 CREATE TABLE suscripción (
     inicio        DATE NOT NULL,
-    fin           DATE NOT NULL check(fin>inicio),
+    fin           DATE NOT NULL, check(fin>inicio),
     cliente_doc   VARCHAR2(10) NOT NULL,
     cliente_td    VARCHAR2(4) NOT NULL
 );
@@ -441,12 +440,12 @@ ALTER TABLE empleado
     ADD CONSTRAINT empleado_tipo_documento_fk FOREIGN KEY ( tipo_doc )
         REFERENCES tipo_documento ( código );
 
-ALTER TABLE empleados_taquilla
-    ADD CONSTRAINT empleados_taquilla_empleado_fk FOREIGN KEY ( empleado_cod )
+ALTER TABLE empleado_taquilla
+    ADD CONSTRAINT empleado_taquilla_empleado_fk FOREIGN KEY ( empleado_cod )
         REFERENCES empleado ( código );
 
-ALTER TABLE empleados_taquilla
-    ADD CONSTRAINT empleados_taquilla_taquilla_fk FOREIGN KEY ( taquilla_num,
+ALTER TABLE empleado_taquilla
+    ADD CONSTRAINT empleado_taquilla_taquilla_fk FOREIGN KEY ( taquilla_num,
                                                                 t_sucursal_cod )
         REFERENCES taquilla ( número,
                               sucursal_cod );
